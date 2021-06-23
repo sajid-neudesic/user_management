@@ -1,21 +1,14 @@
 package com.sajid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.sql.*;
 
+@Component
 public class DatabaseDAO {
+    @Autowired
     private Connection connection;
-
-//    public DatabaseDAO() throws Exception {
-//        this(DriverManager.getConnection("jdbc:mysql://localhost:3306/user_db?useSSL=false", "root", "root"));
-//    }
-
-//    public DatabaseDAO(Connection connection) throws Exception {
-//        this.connection = connection;
-//    }             // doing this with bean
-
-    public DatabaseDAO(Connection connection) {
-        this.connection = connection;
-    }
 
     public ResultSet readOnly(String sql) throws SQLException {     // return Result set on http request
         PreparedStatement preparedStatement = connection.prepareStatement(sql);

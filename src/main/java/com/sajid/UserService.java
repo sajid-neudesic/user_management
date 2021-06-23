@@ -62,6 +62,10 @@ public class UserService {
         return null;
     }
 
+    private void doSomething() {
+
+    }
+
     public void delete(int id) throws SQLException {    // delete user with given id
         try {
             String sql = "DELETE FROM user_info WHERE ID =  '"+ id +"' ";

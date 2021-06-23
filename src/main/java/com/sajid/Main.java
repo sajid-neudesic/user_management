@@ -2,6 +2,9 @@ package com.sajid;
 
 import java.sql.*;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -38,5 +41,22 @@ public class Main {
     @Bean
     public UserService createUserService() throws Exception {
         return new UserService(createDatabaseDao());
+    }
+
+    @Bean
+    public UserServiceHibernate createUserServiceHibernate() throws Exception {
+        return new UserServiceHibernate(getCurrentSessionFromConfig());
+    }
+
+    private static SessionFactory getCurrentSessionFromConfig() {
+        // SessionFactory in Hibernate 5 example
+        Configuration config = new Configuration();
+        config.addAnnotatedClass(User.class);
+        config.configure();
+        // local SessionFactory bean created
+        SessionFactory sessionFactory = config.buildSessionFactory();
+        //Session session = sessionFactory.getCurrentSession();
+        //return session;
+        return sessionFactory;
     }
 }

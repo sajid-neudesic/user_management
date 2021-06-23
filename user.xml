@@ -18,7 +18,7 @@
 
     <bean id="databaseDaoBean" class="com.sajid.DatabaseDAO"/>
 
-    <bean id="userService" class="com.sajid.UserService">
+    <bean id="userService" class="com.sajid.UserServiceJDBC">
         <property name="databaseDao" ref="databaseDaoBean"/>
     </bean>
 

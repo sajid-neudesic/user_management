@@ -2,7 +2,6 @@ package com.sajid;
 
 import java.sql.*;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.springframework.boot.SpringApplication;
@@ -14,8 +13,6 @@ public class Main {
     public static void main(String[] args) throws SQLException {
 
         SpringApplication.run(Main.class, args);
-        //ApplicationContext context = new ClassPathXmlApplicationContext("applicationcontext.xml");
-
 
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -32,31 +29,12 @@ public class Main {
         return DriverManager.getConnection(jdbcUrl, "root", "root");
     }
 
-    @Bean
-    public DatabaseDAO createDatabaseDao() throws Exception {
-        return new DatabaseDAO(createConnection());
-        //return new DatabaseDAO(DriverManager.getConnection("jdbc:mysql://localhost:3306/user_db?useSSL=false", "root", "root"));
-    }
-
-    @Bean
-    public UserService createUserService() throws Exception {
-        return new UserService(createDatabaseDao());
-    }
-
-    @Bean
-    public UserServiceHibernate createUserServiceHibernate() throws Exception {
-        return new UserServiceHibernate(getCurrentSessionFromConfig());
-    }
-
-    private static SessionFactory getCurrentSessionFromConfig() {
+    @Bean(name = "entityManagerFactory")
+    public SessionFactory getCurrentSessionFromConfig() {
         // SessionFactory in Hibernate 5 example
         Configuration config = new Configuration();
         config.addAnnotatedClass(User.class);
         config.configure();
-        // local SessionFactory bean created
-        SessionFactory sessionFactory = config.buildSessionFactory();
-        //Session session = sessionFactory.getCurrentSession();
-        //return session;
-        return sessionFactory;
+        return config.buildSessionFactory();
     }
 }

@@ -8,30 +8,25 @@ import java.util.List;
 
 @RestController
 public class UserController {
+    @Autowired
     private UserService userService;
-    private UserServiceHibernate userServiceHibernate;
 
-    public UserController(UserService userService, UserServiceHibernate userServiceHibernate) {
-        this.userService = userService;
-        this.userServiceHibernate = userServiceHibernate;
-    }
+    @Autowired
+    private UserServiceHibernate userServiceHibernate;
 
     @GetMapping("users")        // get all users from database
     public List<User> getAllUsers() throws SQLException {
-        //return userService.getAllUsers();
-        return userServiceHibernate.getAllUsers();
+        return userService.getAllUsers();
     }
 
     @PostMapping("/users")      // add user to the database
     public String addUser(@RequestBody User user) throws SQLException {
-        //userService.add(user);
         userServiceHibernate.addUser(user);
         return "User Added";
     }
 
     @DeleteMapping("/users/{id}")       // delete user by id from the database
     public String deleteUser(@PathVariable int id) throws Exception {
-        //userService.delete(id);
         userServiceHibernate.deleteUser(id);
         return "User deleted";
     }
@@ -51,13 +46,11 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public User getUserById(@PathVariable int id) throws Exception {
-        User user = userServiceHibernate.getUserById(id);
-        return user;
+        return userServiceHibernate.getUserById(id);
     }
 
     @PutMapping("/users/{id}")      // update user with id
     public String updateUser(@PathVariable int id, @RequestBody User user) throws SQLException {
-        //userService.update(id, user);
         userServiceHibernate.updateUser(id, user);
         return "User Updated";
     }

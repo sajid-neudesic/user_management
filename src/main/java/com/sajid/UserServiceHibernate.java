@@ -2,23 +2,34 @@ package com.sajid;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public class UserServiceHibernate {
+@Service
+public class UserServiceHibernate implements UserService {
+    @Autowired
     SessionFactory sessionFactory;
 
-    public UserServiceHibernate(SessionFactory sf) {this.sessionFactory = sf;}
-
+    @Override
     public List<User> getAllUsers() {       // return all data from table
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
 
         return session.createQuery("FROM User").list();
-
-        //return session.createCriteria(User.class).list();
     }
 
+    @Override
+    public User getUserById(int id) {       // retrieve a row from table of given primary key
+        Session session = sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        User user = (User) session.get(User.class, id);
+        session.getTransaction().commit();
+        return user;
+    }
+
+    @Override
     public void addUser(User user) {        // add a new row/data in table
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
@@ -26,15 +37,7 @@ public class UserServiceHibernate {
         session.getTransaction().commit();
     }
 
-    public User getUserById(int id) {       // retrieve a row from table of given primary key
-        Session session = sessionFactory.getCurrentSession();
-        session.beginTransaction();
-        User user = (User) session.get(User.class, id);
-        session.getTransaction().commit();
-
-        return user;
-    }
-
+    @Override
     public void deleteUser(int id) {        // removes a row from table of given primary key
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
@@ -43,6 +46,7 @@ public class UserServiceHibernate {
         session.getTransaction().commit();
     }
 
+    @Override
     public void updateUser(int id, User user) {        // update all columns of a row
         Session session = sessionFactory.getCurrentSession();
         session.beginTransaction();
